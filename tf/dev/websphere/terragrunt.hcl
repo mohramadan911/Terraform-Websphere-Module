@@ -12,6 +12,7 @@ include {
 
 inputs {
   vsphere_server = "vsphere.example.com"
+  websphere_version = var.websphere_version
   vsphere_user = "user"
   vsphere_password = "password"
   datacenter_name = "Datacenter"
