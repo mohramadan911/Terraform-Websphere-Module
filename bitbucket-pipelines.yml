@@ -11,6 +11,12 @@ pipelines:
             - terragrunt apply
           trigger:
             - message: 'Apply dev'
+      - step:
+          name: Run installation and configuration scripts
+          script:
+            - cd terraform/scripts
+            - chmod +x install_websphere.sh configure_websphere.sh
+            - if [ "$BITBUCKET_BRANCH" = "dev" ]; then ./install_websphere.sh && ./configure_websphere.sh ; fi
     int:
       - step:
           name: Plan and apply Terragrunt files (int)
@@ -22,6 +28,12 @@ pipelines:
             - merge_request:
                 source: 'feature'
                 destination: 'develop'
+      - step:
+          name: Run installation and configuration scripts
+          script:
+            - cd terraform/scripts
+            - chmod +x install_websphere.sh configure_websphere.sh
+            - if [ "$BITBUCKET_BRANCH" = "int" ]; then ./install_websphere.sh && ./configure_websphere.sh ; fi
     prod:
       - step:
           name: Plan and apply Terragrunt files (prod)
@@ -30,6 +42,12 @@ pipelines:
             - terragrunt plan
             - terragrunt apply
           trigger:
-            - merge_request:
-                source: 'develop'
-                destination: 'main'
+                  - merge_request:
+                      source: 'develop'
+                      destination: 'main'
+            - step:
+                name: Run installation and configuration scripts
+                script:
+                  - cd terraform/scripts
+                  - chmod +x install_websphere.sh configure_websphere.sh
+                  - if [ "$BITBUCKET_BRANCH" = "prod" ]; then ./install_websphere.sh && ./configure_websphere.sh ; fi
