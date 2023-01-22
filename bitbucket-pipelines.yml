@@ -1,0 +1,35 @@
+image: hashicorp/terraform:latest
+
+pipelines:
+  custom:
+    dev:
+      - step:
+          name: Plan and apply Terragrunt files (dev)
+          script:
+            - cd tf/dev
+            - terragrunt plan
+            - terragrunt apply
+          trigger:
+            - message: 'Apply dev'
+    int:
+      - step:
+          name: Plan and apply Terragrunt files (int)
+          script:
+            - cd tf/int
+            - terragrunt plan
+            - terragrunt apply
+          trigger:
+            - merge_request:
+                source: 'feature'
+                destination: 'develop'
+    prod:
+      - step:
+          name: Plan and apply Terragrunt files (prod)
+          script:
+            - cd tf/prod
+            - terragrunt plan
+            - terragrunt apply
+          trigger:
+            - merge_request:
+                source: 'develop'
+                destination: 'main'
