@@ -33,3 +33,7 @@ variable "num_cpus" {
   type = string
   default = "2"
 }
+variable "websphere_version" {
+  type = string
+  default = "8.5.5"
+}
